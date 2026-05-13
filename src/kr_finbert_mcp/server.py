@@ -15,13 +15,32 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-MODEL_NAME = os.environ.get("KR_FINBERT_MODEL", "snunlp/KR-FinBert-SC")
+HF_FALLBACK = "snunlp/KR-FinBert-SC"
 HOST = os.environ.get("MCP_HOST", "127.0.0.1")
 PORT = int(os.environ.get("MCP_PORT", "8000"))
 MAX_TOKENS = 512
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("kr_finbert_mcp")
+
+
+def _resolve_model_source(configured: str | None) -> str:
+    """Pick where to load the model from.
+
+    Local path with config.json → use it. Empty/missing local dir → fall back
+    to the HF Hub ID so transformers can download on first run.
+    """
+    if not configured:
+        return HF_FALLBACK
+    if os.path.isdir(configured):
+        if os.path.isfile(os.path.join(configured, "config.json")):
+            return configured
+        log.info("Local model dir %s is empty; falling back to HF Hub %s", configured, HF_FALLBACK)
+        return HF_FALLBACK
+    return configured
+
+
+MODEL_NAME = _resolve_model_source(os.environ.get("KR_FINBERT_MODEL"))
 
 
 def _pick_device() -> str:
