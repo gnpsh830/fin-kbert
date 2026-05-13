@@ -5,9 +5,13 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./src/KR-FinBert-SC:/models/KR-FinBert-SC:ro
+      - ./KR-FinBert-SC:/models/KR-FinBert-SC:ro
+      - hf-cache:/root/.cache/huggingface
     environment:
       MCP_HOST: 0.0.0.0
       MCP_PORT: 8000
       KR_FINBERT_MODEL: /models/KR-FinBert-SC
     restart: unless-stopped
+
+volumes:
+  hf-cache:
