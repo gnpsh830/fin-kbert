@@ -9,6 +9,7 @@ description = "MCP server exposing snunlp/KR-FinBert-SC sentiment analysis as a 
 requires-python = ">=3.10"
 dependencies = [
     "mcp>=1.2.0",
+    "sentencepiece>=0.2",
     "transformers>=4.40",
     "torch>=2.1",
     "hf_xet>=0.1",
