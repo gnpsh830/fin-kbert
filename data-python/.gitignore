@@ -1,0 +1,30 @@
+.venv/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Output
+output/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.code-workspace
+.history/
+.project
+.pydevproject
+.settings/
+nbproject/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
